@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>登入</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 32px 20px; background: #f5f5f7; color: #1d1d1f; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif; }
+    main { width: 100%; max-width: 440px; }
+    .card { padding: 44px 36px 30px; border: 1px solid #e8e8ed; border-radius: 28px; background: white; box-shadow: 0 16px 48px #1d1d1f06; }
+    .eyebrow { margin: 0 0 12px; color: #6e6e73; font-size: 12px; letter-spacing: .16em; }
+    h1 { margin: 0; font-size: 30px; font-weight: 600; letter-spacing: -.04em; }
+    .intro { margin: 12px 0 32px; color: #6e6e73; font-size: 14px; line-height: 1.8; }
+    .field { margin-bottom: 22px; }
+    label { display: block; margin-bottom: 9px; font-size: 14px; font-weight: 500; }
+    input { width: 100%; min-width: 0; height: 52px; padding: 0 15px; border: 1px solid #b9b9c1; border-radius: 12px; background: white; color: #1d1d1f; font: inherit; font-size: 16px; }
+    input::placeholder { color: #86868b; }
+    input:focus-visible, button:focus-visible { outline: 3px solid #0071e3; outline-offset: 3px; }
+    .hint { margin: 9px 0 0; color: #6e6e73; font-size: 12px; line-height: 1.6; }
+    button { font: inherit; cursor: pointer; touch-action: manipulation; }
+    .primary { width: 100%; min-height: 50px; margin-top: 6px; padding: 12px 18px; border: 0; border-radius: 12px; background: #0071e3; color: white; font-weight: 500; }
+    .primary:hover { background: #0062c4; }
+    .secondary { display: block; min-height: 44px; margin: 12px auto 0; padding: 10px 14px; border: 0; border-radius: 8px; background: transparent; color: #0066cc; font-size: 14px; }
+    .secondary:hover { background: #f5f8fc; }
+    .status { margin: 16px 0 0; padding: 12px; border-radius: 10px; background: #f5f5f7; font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; }
+    .status:empty { display: none; }
+    @media (max-width: 480px) { body { padding: 24px 16px; } .card { padding: 34px 24px 26px; border-radius: 22px; } h1 { font-size: 27px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card" aria-labelledby="title">
+      <p class="eyebrow">歡迎回來</p>
+      <h1 id="title">登入你的帳號</h1>
+      <p class="intro">輸入使用者帳號與一次性驗證碼，<br>繼續你的下一步。</p>
+      <form id="login-form">
+        <div class="field">
+          <label for="account">使用者帳號</label>
+          <input id="account" name="account" type="text" autocomplete="username" placeholder="請輸入使用者帳號" required>
+        </div>
+        <div class="field">
+          <label for="otp">OTP 驗證碼</label>
+          <input id="otp" name="otp" type="text" autocomplete="one-time-code" placeholder="請輸入驗證碼" aria-describedby="otp-hint" required>
+          <p class="hint" id="otp-hint">請輸入你收到的一次性驗證碼。</p>
+        </div>
+        <button class="primary" type="submit">登入驗證</button>
+        <button class="secondary" id="resend" type="button">重新傳送驗證碼</button>
+        <p class="status" id="status" role="status" aria-live="polite" aria-atomic="true"></p>
+      </form>
+    </section>
+  </main>
+  <script>
+    const form = document.getElementById('login-form');
+    const account = document.getElementById('account');
+    const otp = document.getElementById('otp');
+    const status = document.getElementById('status');
+    function checkFilled(input) {
+      input.setCustomValidity(input.value.trim() ? '' : '請填寫此欄位。');
+      return input.reportValidity();
+    }
+    [account, otp].forEach(input => {
+      input.addEventListener('input', () => {
+        input.setCustomValidity('');
+        status.textContent = '';
+      });
+    });
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      if (!checkFilled(account) || !checkFilled(otp)) return;
+      status.textContent = '已完成雛型表單操作。此頁未連接登入服務，尚未進行身分驗證。';
+    });
+    document.getElementById('resend').addEventListener('click', () => {
+      if (!checkFilled(account)) return;
+      status.textContent = '這是重新傳送驗證碼的操作示範，未實際寄送任何驗證碼。';
+    });
+  </script>
+</body>
+</html>
