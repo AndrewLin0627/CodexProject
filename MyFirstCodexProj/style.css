@@ -1,6 +1,10 @@
 body {
     background-image: url('南宮婉.png');
-    background-size: auto;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    margin: 0;
 }
 h1 {
     color: white;
